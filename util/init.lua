@@ -10,11 +10,13 @@ end
 
 function M.is_sorted(t, cmp)
 	cmp = cmp or M.cmp_asc
+
 	for i = 2, #t do
 		if not cmp(t[i - 1], t[i]) then
 			return false
 		end
 	end
+
 	return true
 end
 

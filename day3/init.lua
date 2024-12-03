@@ -51,13 +51,13 @@ function M.part2(lines)
 		assert(#do_numbers % 2 == 0)
 	end
 
-	local sum2 = 0
+	local sum = 0
 
 	for i = 1, #do_numbers, 2 do
-		sum2 = sum2 + do_numbers[i] * do_numbers[i + 1]
+		sum = sum + do_numbers[i] * do_numbers[i + 1]
 	end
 
-	return sum2
+	return sum
 end
 
 function M.tests()

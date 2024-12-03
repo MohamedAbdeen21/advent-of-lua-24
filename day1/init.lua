@@ -15,7 +15,6 @@ local function split(lines)
 	return left, right
 end
 
--- part 1
 function M.part1(lines)
 	lines = lines or util.lines_from("./day1/input.txt")
 	local left, right = split(lines)
@@ -32,7 +31,6 @@ function M.part1(lines)
 	return sum
 end
 
--- part 2
 function M.part2(lines)
 	lines = lines or util.lines_from("./day1/input.txt")
 	local left, right = split(lines)

@@ -16,6 +16,9 @@ local function split(lines)
 	return reports
 end
 
+---@param report number[]
+---@return boolean
+---@nodiscard
 local function is_safe(report)
 	local is_asc = util.is_sorted(report)
 	local is_desc = util.is_sorted(report, util.cmp_desc)
