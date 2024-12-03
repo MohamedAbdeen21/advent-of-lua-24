@@ -1,3 +1,4 @@
--- require("day1")
--- require("day2")
-require("day3")
+local day = require("day3")
+
+print(day.part1())
+print(day.part2())
