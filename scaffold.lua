@@ -9,8 +9,8 @@ local function create_directory(dir_name)
 	return true
 end
 
-local function create_file(file_name, content)
-	local file, err = io.open(file_name, "w")
+local function touch_file(file_name, content, mode)
+	local file, err = io.open(file_name, mode or "w")
 	if not file then
 		print("Error creating file:", err)
 		return false
@@ -18,6 +18,14 @@ local function create_file(file_name, content)
 	file:write(content or "")
 	file:close()
 	return true
+end
+
+local function create_file(file_name, content)
+	return touch_file(file_name, content, "w")
+end
+
+local function append_file(file_name, content)
+	return touch_file(file_name, content, "a+")
 end
 
 local day = arg[1]
@@ -29,6 +37,7 @@ local dir_name = "./day" .. day
 local input_file = dir_name .. "/input.txt"
 local test_file = dir_name .. "/test.txt"
 local code_file = dir_name .. "/init.lua"
+local main_test_file = "./test.lua"
 
 local boilerplate = string.format(
 	[[
@@ -66,8 +75,9 @@ if
 	and create_file(input_file, "")
 	and create_file(test_file, "")
 	and create_file(code_file, boilerplate)
+	and append_file(main_test_file, 'test("day' .. day .. '")\n')
 then
-	print("Done scaffolding")
+	print("Scaffolding successfull")
 else
-	print("Failed to scaffold")
+	print("Scaffolding failed")
 end
