@@ -9,7 +9,6 @@ local function create_directory(dir_name)
 	return true
 end
 
--- Function to create a file with content
 local function create_file(file_name, content)
 	local file, err = io.open(file_name, "w")
 	if not file then
@@ -35,15 +34,21 @@ local boilerplate = string.format(
 	[[
 local util = require("util")
 
-function M.part1()
-	return 0
-end
-
-function M.part2()
-	return 0
-end
-
 local M = {}
+
+function M.part1(lines)
+	for _, line in ipairs(lines) do
+		print(line)
+	end
+	return 0
+end
+
+function M.part2(lines)
+	for _, line in ipairs(lines) do
+		print(line)
+	end
+	return 0
+end
 
 function M.tests()
 	assert(M.part1(util.lines_from("./day%s/test.txt")) == 0)
@@ -56,7 +61,13 @@ return M
 	day
 )
 
-create_directory(dir_name)
-create_file(input_file, "")
-create_file(test_file, "")
-create_file(code_file, boilerplate)
+if
+	create_directory(dir_name)
+	and create_file(input_file, "")
+	and create_file(test_file, "")
+	and create_file(code_file, boilerplate)
+then
+	print("Done scaffolding")
+else
+	print("Failed to scaffold")
+end
