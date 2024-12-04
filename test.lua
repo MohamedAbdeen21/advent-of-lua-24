@@ -5,3 +5,4 @@ end
 test("day1")
 test("day2")
 test("day3")
+test("day4")
