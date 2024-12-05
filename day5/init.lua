@@ -79,7 +79,10 @@ function M.part2(lines)
 	lines = lines or util.lines_from("./day5/input.txt")
 	local ordering, updates = split_input(lines)
 
-	---@type table<number, table<number>>
+	local _, incorrect_updates = span_updates(ordering, updates)
+
+	-- hashmap of number: hashset
+	---@type table<number, table<number, boolean>>
 	local before = {}
 
 	for _, order in ipairs(ordering) do
@@ -88,8 +91,6 @@ function M.part2(lines)
 	end
 
 	-- This relies on SO many assumptions ... I'm sorry, but it works
-	local _, incorrect_updates = span_updates(ordering, updates)
-
 	for _, update in ipairs(incorrect_updates) do
 		table.sort(update, function(a, b)
 			return before[a] ~= nil and before[a][b] == true
