@@ -46,6 +46,7 @@ local util = require("util")
 local M = {}
 
 function M.part1(lines)
+	lines = lines or util.lines_from("./day%s/input.txt")
 	for _, line in ipairs(lines) do
 		print(line)
 	end
@@ -53,6 +54,7 @@ function M.part1(lines)
 end
 
 function M.part2(lines)
+	lines = lines or util.lines_from("./day%s/input.txt")
 	for _, line in ipairs(lines) do
 		print(line)
 	end
@@ -66,6 +68,8 @@ end
 
 return M
 ]],
+	day,
+	day,
 	day,
 	day
 )
