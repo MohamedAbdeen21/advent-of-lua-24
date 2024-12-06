@@ -23,7 +23,11 @@ end
 function M.copy_table(t)
 	local copy = {}
 	for k, v in pairs(t) do
-		copy[k] = v
+		if type(v) == "table" then
+			copy[k] = M.copy_table(v)
+		else
+			copy[k] = v
+		end
 	end
 	return copy
 end
@@ -75,7 +79,7 @@ function M.to_grid(lines)
 end
 
 function M.find_all_positions_of(grid, target)
-	---@type {x: number, y: number}[]
+	---@type number[][]
 	local xs = {}
 
 	for i, row in ipairs(grid) do
