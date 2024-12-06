@@ -74,4 +74,19 @@ function M.to_grid(lines)
 	return matrix
 end
 
+function M.find_all_positions_of(grid, target)
+	---@type {x: number, y: number}[]
+	local xs = {}
+
+	for i, row in ipairs(grid) do
+		for j, col in ipairs(row) do
+			if col == target then
+				xs[#xs + 1] = { i, j }
+			end
+		end
+	end
+
+	return xs
+end
+
 return M

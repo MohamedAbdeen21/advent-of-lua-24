@@ -2,21 +2,6 @@ local util = require("util")
 
 local M = {}
 
-local function find_all_positions_of(grid, target)
-	---@type {x: number, y: number}[]
-	local xs = {}
-
-	for i, row in ipairs(grid) do
-		for j, col in ipairs(row) do
-			if col == target then
-				xs[#xs + 1] = { i, j }
-			end
-		end
-	end
-
-	return xs
-end
-
 local function grid_at(grid, x, y)
 	if x < 1 or x > #grid or y < 1 or y > #grid[x] then
 		return "."
@@ -52,7 +37,7 @@ function M.part1(lines)
 	lines = lines or util.lines_from("./day4/input.txt")
 	local grid = util.to_grid(lines)
 
-	local xs = find_all_positions_of(grid, "X")
+	local xs = util.find_all_positions_of(grid, "X")
 
 	local directions = {
 		{ 1, 0 },
@@ -82,7 +67,7 @@ function M.part2(lines)
 	lines = lines or util.lines_from("./day4/input.txt")
 	local grid = util.to_grid(lines)
 
-	local xs = find_all_positions_of(grid, "A")
+	local xs = util.find_all_positions_of(grid, "A")
 
 	local sum = 0
 
