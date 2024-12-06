@@ -17,19 +17,6 @@ local function find_all_positions_of(grid, target)
 	return xs
 end
 
-local function to_grid(lines)
-	local matrix = {}
-
-	for i, line in ipairs(lines) do
-		matrix[#matrix + 1] = {}
-		for j = 1, #line do
-			matrix[i][#matrix[i] + 1] = line:sub(j, j)
-		end
-	end
-
-	return matrix
-end
-
 local function grid_at(grid, x, y)
 	if x < 1 or x > #grid or y < 1 or y > #grid[x] then
 		return "."
@@ -63,7 +50,7 @@ end
 
 function M.part1(lines)
 	lines = lines or util.lines_from("./day4/input.txt")
-	local grid = to_grid(lines)
+	local grid = util.to_grid(lines)
 
 	local xs = find_all_positions_of(grid, "X")
 
@@ -93,7 +80,7 @@ end
 
 function M.part2(lines)
 	lines = lines or util.lines_from("./day4/input.txt")
-	local grid = to_grid(lines)
+	local grid = util.to_grid(lines)
 
 	local xs = find_all_positions_of(grid, "A")
 

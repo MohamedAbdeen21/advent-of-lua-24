@@ -61,4 +61,17 @@ function M.lines_from(file)
 	return lines
 end
 
+function M.to_grid(lines)
+	local matrix = {}
+
+	for i, line in ipairs(lines) do
+		matrix[#matrix + 1] = {}
+		for j = 1, #line do
+			matrix[i][#matrix[i] + 1] = line:sub(j, j)
+		end
+	end
+
+	return matrix
+end
+
 return M
