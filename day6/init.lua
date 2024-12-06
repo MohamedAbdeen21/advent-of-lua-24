@@ -97,6 +97,7 @@ function M.part2(lines)
 	for key, _ in pairs(visited) do
 		local x, y = string.match(key, "(%d+),(%d+)")
 		x, y = tonumber(x), tonumber(y)
+
 		---@diagnostic disable-next-line: need-check-nil
 		grid[x][y] = "#"
 
@@ -112,8 +113,9 @@ function M.part2(lines)
 end
 
 function M.tests()
-	assert(M.part1(util.lines_from("./day6/test.txt")) == 41)
-	assert(M.part2(util.lines_from("./day6/test.txt")) == 6)
+	local input = util.lines_from("./day6/test.txt")
+	util.run_test(M.part1, input, 41)
+	util.run_test(M.part2, input, 6)
 end
 
 return M

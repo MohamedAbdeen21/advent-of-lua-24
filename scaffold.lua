@@ -62,13 +62,13 @@ function M.part2(lines)
 end
 
 function M.tests()
-	assert(M.part1(util.lines_from("./day%s/test.txt")) == 0)
-	assert(M.part2(util.lines_from("./day%s/test.txt")) == 0)
+	local input = util.lines_from("./day%s/test.txt")
+	util.run_test(M.part1, input, 0)
+	util.run_test(M.part2, input, 0)
 end
 
 return M
 ]],
-	day,
 	day,
 	day,
 	day

@@ -9,7 +9,7 @@ local function test(module)
 	local p = print
 	print = function() end
 
-	local test_success = pcall(m.tests)
+	local test_success, error = pcall(m.tests)
 
 	-- restore print functionality
 	print = p
@@ -17,7 +17,7 @@ local function test(module)
 	if test_success then
 		print(green .. "Tests for " .. module .. " passed!" .. reset)
 	else
-		print(red .. "Tests for " .. module .. " failed!" .. reset)
+		print(red .. "Tests for " .. module .. " failed!" .. reset .. "\n" .. error)
 	end
 end
 

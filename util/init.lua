@@ -93,4 +93,12 @@ function M.find_all_positions_of(grid, target)
 	return xs
 end
 
+function M.run_test(func, input, expected)
+	local ok, actual = pcall(func, input)
+	assert(ok == true, "got error: " .. actual)
+	if actual ~= expected then
+		assert(false, string.format("Part 1 expected %s, got %s", expected, actual))
+	end
+end
+
 return M
