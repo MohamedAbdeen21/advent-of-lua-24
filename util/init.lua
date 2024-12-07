@@ -93,8 +93,21 @@ function M.find_all_positions_of(grid, target)
 	return xs
 end
 
+local function run_without_print(func, input)
+	-- suppress calls to print
+	local p = print
+	print = function() end
+
+	local value = func(input)
+
+	-- restore print functionality
+	print = p
+
+	return value
+end
+
 function M.run_test(func, input, expected)
-	local ok, actual = pcall(func, input)
+	local ok, actual = pcall(run_without_print, func, input)
 	assert(ok == true, "got error: " .. actual)
 	if actual ~= expected then
 		assert(false, string.format("Part 1 expected %s, got %s", expected, actual))
