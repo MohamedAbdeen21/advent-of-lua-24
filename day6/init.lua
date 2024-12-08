@@ -79,7 +79,6 @@ function M.part1(lines)
 end
 
 function M.part2(lines)
-	print("Day 6 Part 2 takes about 10 seconds to complete")
 	lines = lines or util.lines_from("./day6/input.txt")
 	---@type table{number, table{number, string}}
 	local grid = util.to_grid(lines)
