@@ -97,7 +97,7 @@ function M.run_test(func, input, expected)
 	local ok, actual = pcall(func, input)
 	assert(ok == true, "got error: " .. actual)
 	if actual ~= expected then
-		assert(false, string.format("Part 1 expected %s, got %s", expected, actual))
+		assert(false, string.format("expected %s, got %s", expected, actual))
 	end
 end
 
