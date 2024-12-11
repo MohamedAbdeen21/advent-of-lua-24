@@ -101,4 +101,18 @@ function M.run_test(func, input, expected)
 	end
 end
 
+function M.cache_decorator(func)
+	local cache = {}
+	return function(...)
+		local args = { ... }
+		local key = table.concat(args, ",")
+
+		if cache[key] == nil then
+			cache[key] = func(table.unpack(args))
+		end
+
+		return cache[key]
+	end
+end
+
 return M
