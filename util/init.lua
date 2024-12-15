@@ -20,6 +20,28 @@ function M.is_sorted(t, cmp)
 	return true
 end
 
+function M.section_input(lines)
+	local sections = {}
+	local section = {}
+
+	for _, line in ipairs(lines) do
+		if line:match("^%s*$") then
+			if #section > 0 then
+				table.insert(sections, section)
+				section = {}
+			end
+		else
+			table.insert(section, line)
+		end
+	end
+
+	if #section > 0 then
+		table.insert(sections, section)
+	end
+
+	return sections
+end
+
 function M.copy_table(t)
 	local copy = {}
 	for k, v in pairs(t) do
@@ -101,12 +123,30 @@ function M.run_test(func, input, expected)
 	end
 end
 
+local function make_key(...)
+	local args = { ... }
+
+	local key = {}
+
+	for _, arg in ipairs(args) do
+		if type(arg) == "table" then
+			table.insert(key, make_key(table.unpack(arg)))
+		elseif type(arg) == "boolean" then
+			table.insert(key, arg and "true" or "false")
+		else
+			table.insert(key, arg)
+		end
+	end
+
+	return table.concat(key, ",")
+end
+
 function M.cache_decorator(func)
 	local cache = {}
 	return function(...)
-		local args = { ... }
-		local key = table.concat(args, ",")
+		local key = make_key(...)
 
+		local args = { ... }
 		if cache[key] == nil then
 			cache[key] = func(table.unpack(args))
 		end
