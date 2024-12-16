@@ -1,38 +1,64 @@
 local util = require("util")
-
 local M = {}
 
-local inf = math.huge
 local directions = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } }
 
-local function dfs(grid, x, y, direction, score, visited)
-	if visited[x] and visited[x][y] ~= nil and visited[x][y] < score then
-		return inf
-	end
+local function bfs(grid, xi, yi)
+	local queue = {}
+	local visited = {}
+	local best_paths = {}
 
-	if grid[x][y] == "#" then
-		return inf
-	end
+	queue.front = 1
+	queue.rear = 1
 
-	if grid[x][y] == "E" then
-		return score
-	end
+	-- encode the path as string to avoid copying a thousand tables
+	table.insert(queue, { xi, yi, 0, 1, 0, "" })
 
-	visited[x] = visited[x] or {}
-	visited[x][y] = score
+	local min_score = math.huge
 
-	local scores = {}
-	local dx, dy = direction[1], direction[2]
-	for _, d in ipairs(directions) do
-		local ddx, ddy = d[1], d[2]
-		if ddx == dx and ddy == dy then
-			scores[#scores + 1] = dfs(grid, x + ddx, y + ddy, d, score + 1, visited)
-		else
-			scores[#scores + 1] = dfs(grid, x + ddx, y + ddy, d, score + 1001, visited)
+	while queue.front <= queue.rear do
+		local current = queue[queue.front]
+		queue.front = queue.front + 1
+		local x, y, dx, dy, score, path = current[1], current[2], current[3], current[4], current[5], current[6]
+
+		if score > 100000 or score > min_score then
+			goto continue
 		end
+
+		local key = x .. "," .. y .. "," .. dx .. "," .. dy
+		if visited[key] and visited[key] < score then
+			goto continue
+		end
+		visited[key] = score
+
+		if grid[x][y] == "E" then
+			if score < min_score then
+				min_score = score
+				best_paths = {}
+			end
+
+			if score <= min_score then
+				table.insert(best_paths, path)
+			end
+		end
+
+		for _, direction in ipairs(directions) do
+			local ddx, ddy = direction[1], direction[2]
+			local nx, ny = x + ddx, y + ddy
+			if grid[nx][ny] == "#" then
+			elseif ddx == dx and ddy == dy then
+				queue.rear = queue.rear + 1
+				queue[queue.rear] = { nx, ny, dx, dy, score + 1, path .. nx .. "," .. ny .. ";" }
+			else
+				queue.rear = queue.rear + 1
+				queue[queue.rear] = { x, y, ddx, ddy, score + 1000, path }
+			end
+		end
+
+		::continue::
 	end
 
-	return math.min(table.unpack(scores))
+	return min_score, best_paths
 end
 
 function M.part1(lines)
@@ -42,15 +68,33 @@ function M.part1(lines)
 
 	local x, y = start[1][1], start[1][2]
 
-	return dfs(grid, x, y, { 0, 1 }, 0, {})
+	local score, _ = bfs(grid, x, y)
+
+	return score
 end
 
 function M.part2(lines)
 	lines = lines or util.lines_from("./day16/input.txt")
-	for _, line in ipairs(lines) do
-		print(line)
+	local grid = util.to_grid(lines)
+	local start = util.find_all_positions_of(grid, "S")
+
+	local x, y = start[1][1], start[1][2]
+
+	local _, paths = bfs(grid, x, y)
+
+	local unique_paths = {}
+	local sum = 0
+	for _, path in ipairs(paths) do
+		for pair in path:gmatch("([^;]+)") do
+			if unique_paths[pair] then
+			else
+				unique_paths[pair] = true
+				sum = sum + 1
+			end
+		end
 	end
-	return 0
+
+	return sum + 1
 end
 
 function M.tests()
