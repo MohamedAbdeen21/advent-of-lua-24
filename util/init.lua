@@ -155,4 +155,11 @@ function M.cache_decorator(func)
 	end
 end
 
+function M.is_empty(t)
+	for _, _ in pairs(t) do
+		return false
+	end
+	return true
+end
+
 return M
