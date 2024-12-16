@@ -77,9 +77,8 @@ function M.file_exists(file)
 end
 
 function M.lines_from(file)
-	if not M.file_exists(file) then
-		return {}
-	end
+	assert(M.file_exists(file), "File does not exist: " .. file)
+
 	local lines = {}
 	for line in io.lines(file) do
 		lines[#lines + 1] = line
@@ -123,14 +122,14 @@ function M.run_test(func, input, expected)
 	end
 end
 
-local function make_key(...)
+function M.make_key(...)
 	local args = { ... }
 
 	local key = {}
 
 	for _, arg in ipairs(args) do
 		if type(arg) == "table" then
-			table.insert(key, make_key(table.unpack(arg)))
+			table.insert(key, M.make_key(table.unpack(arg)))
 		elseif type(arg) == "boolean" then
 			table.insert(key, arg and "true" or "false")
 		else
@@ -144,7 +143,7 @@ end
 function M.cache_decorator(func)
 	local cache = {}
 	return function(...)
-		local key = make_key(...)
+		local key = M.make_key(...)
 
 		local args = { ... }
 		if cache[key] == nil then
