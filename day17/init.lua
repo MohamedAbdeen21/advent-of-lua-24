@@ -1,6 +1,7 @@
 local util = require("util")
 
 local M = {}
+local int = math.tointeger
 
 local pc = 0
 local stdout = {}
@@ -11,7 +12,6 @@ local function get_combo_operand(operand, registers)
 	elseif operand == 4 then
 		return registers["A"]
 	elseif operand == 5 then
-		print(registers["B"])
 		return registers["B"]
 	elseif operand == 6 then
 		return registers["C"]
@@ -21,19 +21,19 @@ local function get_combo_operand(operand, registers)
 end
 
 local function adv(operand, registers)
-	operand = get_combo_operand(operand)
+	operand = get_combo_operand(operand, registers)
 	registers["A"] = registers["A"] // 2 ^ operand
 	pc = pc + 2
 end
 
 local function bxl(operand, registers)
-	registers["B"] = registers["B"] ~ operand
+	registers["B"] = int(registers["B"] ~ operand)
 	pc = pc + 2
 end
 
 local function bst(operand, registers)
 	operand = get_combo_operand(operand, registers)
-	registers["B"] = operand % 8
+	registers["B"] = int(operand % 8)
 	pc = pc + 2
 end
 
@@ -47,25 +47,25 @@ local function jnz(operand, registers)
 end
 
 local function bxc(_, registers)
-	registers["B"] = registers["B"] ~ registers["C"]
+	registers["B"] = int(registers["B"] ~ registers["C"])
 	pc = pc + 2
 end
 
 local function out(operand, registers)
 	operand = get_combo_operand(operand, registers) % 8
-	table.insert(stdout, math.tointeger(operand))
+	table.insert(stdout, int(operand))
 	pc = pc + 2
 end
 
 local function bdv(operand, registers)
-	operand = get_combo_operand(operand)
+	operand = get_combo_operand(operand, registers)
 	registers["B"] = registers["A"] // 2 ^ operand
 	pc = pc + 2
 end
 
 local function cdv(operand, registers)
-	operand = get_combo_operand(operand)
-	registers["C"] = registers["A"] // 2 ^ operand
+	operand = get_combo_operand(operand, registers)
+	registers["C"] = registers["A"] // (2 ^ operand)
 	pc = pc + 2
 end
 
@@ -114,11 +114,6 @@ function M.part1(lines)
 	lines = lines or util.lines_from("./day17/input.txt")
 	local registers, instructions = parse(lines)
 
-	-- for k, v in pairs(registers) do
-	-- 	print(k, v)
-	-- end
-	-- print(table.concat(instructions, ", "))
-
 	while pc < #instructions do
 		map_function(instructions[pc + 1])(instructions[pc + 2], registers)
 	end
@@ -128,16 +123,15 @@ end
 
 function M.part2(lines)
 	lines = lines or util.lines_from("./day17/input.txt")
-	for _, line in ipairs(lines) do
-		print(line)
-	end
+	local registers, instructions = parse(lines)
 	return 0
 end
 
 function M.tests()
 	local input = util.lines_from("./day17/test.txt")
+	local input2 = util.lines_from("./day17/test2.txt")
 	util.run_test(M.part1, input, "4,6,3,5,6,3,5,2,1,0")
-	util.run_test(M.part2, input, 0)
+	util.run_test(M.part2, input2, 117440)
 end
 
 return M
