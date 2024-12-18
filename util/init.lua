@@ -122,6 +122,14 @@ function M.run_test(func, input, expected)
 	end
 end
 
+function M.run_test_args(expected, func, ...)
+	local ok, actual = pcall(func, ...)
+	assert(ok == true, "got error: " .. actual)
+	if actual ~= expected then
+		assert(false, string.format("expected %s, got %s", expected, actual))
+	end
+end
+
 function M.make_key(...)
 	local args = { ... }
 
