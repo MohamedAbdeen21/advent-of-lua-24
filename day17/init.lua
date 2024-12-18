@@ -121,10 +121,51 @@ function M.part1(lines)
 	return table.concat(stdout, ",")
 end
 
+local function backtrack(octals, i, registers, instructions)
+	for v = 0, 7 do
+		pc = 0
+		stdout = {}
+
+		octals[i] = v
+
+		local octal = table.concat(octals, "")
+		local value = tonumber(octal, 8)
+		registers["A"] = value
+
+		while pc < #instructions do
+			map_function(instructions[pc + 1])(instructions[pc + 2], registers)
+		end
+
+		local output = stdout[#stdout + 1 - i]
+		local program = instructions[#instructions + 1 - i]
+		if output == program then
+			-- base case
+			if i == #octals then
+				return value
+			end
+
+			-- recurse
+			local ans = backtrack(octals, i + 1, registers, instructions)
+			if ans > 0 then
+				return ans
+			end
+		end
+	end
+
+	return -1
+end
+
 function M.part2(lines)
 	lines = lines or util.lines_from("./day17/input.txt")
 	local registers, instructions = parse(lines)
-	return 0
+
+	local octals = {}
+
+	for _ = 1, #instructions do
+		octals[#octals + 1] = 0
+	end
+
+	return backtrack(octals, 1, registers, instructions)
 end
 
 function M.tests()
