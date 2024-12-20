@@ -5,10 +5,15 @@ local dotenv = require("lua-dotenv")
 
 dotenv.load_dotenv(".env")
 
-local function create_directory(dir_name)
+local function create_directory(dir_name, ignore)
+	ignore = ignore or false
+
 	local success, err = lfs.mkdir(dir_name)
 	if not success then
-		print("Error creating directory:", err)
+		if not ignore then
+			print("Error creating directory:", err)
+		end
+
 		return false
 	end
 	return true
@@ -60,10 +65,8 @@ end
 
 local function input_only_mode(day, dir_name, input_file)
 	local input_content = fetch_input(tonumber(day))
-	if not create_directory(dir_name) then
-		print("Error creating directory:", dir_name)
-		os.exit(1)
-	end
+	-- either created or already exists, ok both ways
+	_ = create_directory(dir_name, true)
 
 	if create_file(input_file, input_content) then
 		print("Input successfully fetched and written to", input_file)
