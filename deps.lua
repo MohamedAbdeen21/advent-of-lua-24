@@ -1,5 +1,7 @@
 local dependencies = {
 	{ "luafilesystem", "1.8.0-1" },
+	{ "luasocket", "3.1.0-1" },
+	{ "lua-dotenv", "1.0-2" },
 }
 
 local function install_dependencies()
