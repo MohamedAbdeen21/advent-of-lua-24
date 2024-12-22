@@ -8,6 +8,10 @@ M.cmp_desc = function(a, b)
 	return a > b
 end
 
+M.cmp_len = function(a, b)
+	return #a < #b
+end
+
 function M.is_sorted(t, cmp)
 	cmp = cmp or M.cmp_asc
 
