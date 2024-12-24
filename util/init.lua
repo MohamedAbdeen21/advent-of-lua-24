@@ -12,6 +12,34 @@ M.cmp_len = function(a, b)
 	return #a < #b
 end
 
+function M.set_size(a)
+	local count = 0
+	for _, _ in pairs(a) do
+		count = count + 1
+	end
+	return count
+end
+
+function M.difference(a, b)
+	local c = {}
+	for k, _ in pairs(a) do
+		if not b[k] then
+			c[k] = true
+		end
+	end
+	return c
+end
+
+function M.intersection(a, b)
+	local c = {}
+	for k, v in pairs(a) do
+		if b[k] then
+			c[k] = v
+		end
+	end
+	return c
+end
+
 function M.is_sorted(t, cmp)
 	cmp = cmp or M.cmp_asc
 
