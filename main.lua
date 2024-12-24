@@ -1,4 +1,4 @@
-local day = require("day22")
+local day = require("day24")
 
 print(day.part1())
-print(day.part2())
+-- print(day.part2())
